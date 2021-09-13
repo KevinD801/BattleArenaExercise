@@ -41,7 +41,7 @@ namespace BattleArena
 
             while (!gameOver)
             {
-                gameOver = true;
+                Update();
             }
             End();
 
@@ -218,24 +218,12 @@ namespace BattleArena
                 Console.Clear();
 
                 int input = GetInput("You've entered " + player.name + " are you sure you want to keep this name?",
-                    "Keep Name", " Rename");
+                    "Keep Name", "Rename");
 
                 if (input == 1)
                 {
                     userName = true;
                 }
-            }
-            string name = Console.ReadLine();
-
-            int input = GetInput("Do you wish change your name", "Rename", "Keep Name");
-            
-            if(input == 1)
-            {
-                GetPlayerName();
-            }
-            else if (input == 2)
-            {
-                return;
             }
         }
 
@@ -273,7 +261,7 @@ namespace BattleArena
             Console.WriteLine("Name: " + character.name);
             Console.WriteLine("Health: " + character.health);
             Console.WriteLine("Attack Power: " + character.attackPower);
-            Console.WriteLine("Defense Power: " + character.defensePower);
+            Console.WriteLine("Defense Power: " + character.defensePower + "\n" );
         }
 
         /// <summary>
