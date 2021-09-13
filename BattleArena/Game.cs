@@ -24,11 +24,27 @@ namespace BattleArena
         private int currentEnemyIndex = 0;
         private Character currentEnemy;
 
+
+
+
+        Character slime;
+        Character zomb;
+        Character kris;
+
+
         /// <summary>
         /// Function that starts the main game loop
         /// </summary>
         public void Run()
         {
+            Start();
+
+            while (!gameOver)
+            {
+                gameOver = true;
+            }
+            End();
+
         }
 
         /// <summary>
@@ -36,6 +52,26 @@ namespace BattleArena
         /// </summary>
         public void Start()
         {
+            // Enemies
+            slime.name = "Slime";
+            slime.health = 10f;
+            slime.attackPower = 1f;
+            slime.defensePower = 0f;
+
+            zomb.name = "Zom-b";
+            zomb.health = 15f;
+            zomb.attackPower = 5f;
+            zomb.defensePower = 2f;
+
+            kris.name = "guy named Kris";
+            kris.health = 25f;
+            kris.attackPower = 10f;
+            kris.defensePower = 5f;
+
+
+
+            enemies = new Character[] { slime, zomb, kris };
+
         }
 
         /// <summary>
@@ -43,6 +79,9 @@ namespace BattleArena
         /// </summary>
         public void Update()
         {
+
+
+
         }
 
         /// <summary>
@@ -50,6 +89,9 @@ namespace BattleArena
         /// </summary>
         public void End()
         {
+            Console.WriteLine("Welcome! Please enter your name.");
+            Console.Write("> ");
+            Console.WriteLine("Fairwell Adventurer.");
         }
 
         /// <summary>
@@ -104,6 +146,18 @@ namespace BattleArena
         /// </summary>
         void DisplayCurrentScene()
         {
+            if (currentScene == 1)
+            {
+
+            }
+            else if (currentScene == 2)
+            {
+
+            }
+            else if (currentScene == 3)
+            {
+
+            }
         }
 
         /// <summary>
@@ -111,6 +165,29 @@ namespace BattleArena
         /// </summary>
         void DisplayMainMenu()
         {
+            //Display question and store input
+            int input = GetInput("Play Again?", "Yes", "No");
+
+
+            //If the player decides to restart...
+            if (input == 1)
+            {
+                //...set their current area to be the start and update the player state to be alive
+                currentScene = 1;
+                gameOver = false;
+            }
+            //Otherwise if the player wants to quit...
+            else if (input == 2)
+            {
+                //...set game over to be true
+                gameOver = true;
+            }
+            else
+            {
+                //...display error message
+                Console.WriteLine("Invalid Input");
+                Console.ReadKey();
+            }
         }
 
         /// <summary>
@@ -119,7 +196,18 @@ namespace BattleArena
         /// </summary>
         void GetPlayerName()
         {
+            string name = Console.ReadLine();
 
+            int input = GetInput("Do you wish change your name", "Rename", "Keep Name");
+            
+            if(input == 1)
+            {
+                GetPlayerName();
+            }
+            else if (input == 2)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -128,6 +216,13 @@ namespace BattleArena
         /// </summary>
         public void CharacterSelection()
         {
+
+            int input = GetInput("", "Knight", "Wizard");
+            Console.WriteLine("Nice to meet you" + name + " Please select a character.");
+            Console.WriteLine("1. " + option1);
+            Console.WriteLine("2. " + option2);
+            Console.Write("> ");
+
         }
 
         /// <summary>
@@ -136,6 +231,10 @@ namespace BattleArena
         /// <param name="character">The character that will have its stats shown</param>
         void DisplayStats(Character character)
         {
+
+            Console.WriteLine("Health: " + character.health);
+            Console.WriteLine("Attack Power: " + character.attackPower);
+            Console.WriteLine("Defense Power: " + character.defensePower);
         }
 
         /// <summary>
@@ -146,6 +245,8 @@ namespace BattleArena
         /// <returns>The amount of damage done to the defender</returns>
         float CalculateDamage(float attackPower, float defensePower)
         {
+
+
         }
 
         /// <summary>
@@ -156,6 +257,8 @@ namespace BattleArena
         /// <returns>The amount of damage done to the defender</returns>
         public float Attack(ref Character attacker, ref Character defender)
         {
+
+
         }
 
         /// <summary>
@@ -163,6 +266,8 @@ namespace BattleArena
         /// </summary>
         public void Battle()
         {
+
+
         }
 
         /// <summary>
@@ -171,7 +276,26 @@ namespace BattleArena
         /// </summary>
         void CheckBattleResults()
         {
+
+
         }
 
+        void Scene()
+        {
+            Console.WriteLine("A Slime stands in front of you! What will you do?");
+            Console.WriteLine("You slayed the Slime");
+        }
+
+        void Scene2()
+        {
+            Console.WriteLine("A Zom-B stands in front of you! What will you do?");
+            Console.WriteLine("You slayed the Zom-B");
+        }
+
+        void Scene3()
+        {
+            Console.WriteLine("A guy named Kris stands in front of you! What will you do?");
+            Console.WriteLine("You slayed the guy named Kris");
+        }
     }
 }
