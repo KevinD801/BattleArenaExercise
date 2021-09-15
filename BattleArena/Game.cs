@@ -65,21 +65,21 @@ namespace BattleArena
             // AttackPower = 1f;
             // DefensePower = 0f;
 
-            slime = new Character { name = "Slime ", health = 10f , attackPower = 1f, defensePower = 0f};
+            slime = new Character { name = "Slime", health = 10f , attackPower = 1f, defensePower = 0f};
 
             // Name = "Zom-b";
             // Health = 15f;
             // AttackPower = 5f;
             // DefensePower = 2f;
 
-            zomb = new Character { name = "Zomb-b ", health = 15f, attackPower = 5f, defensePower = 2f };
+            zomb = new Character { name = "Zomb-b", health = 15f, attackPower = 5f, defensePower = 2f };
 
             // Name = "guy named Kris";
             // Health = 25f;
             // AttackPower = 10f;
             // DefensePower = 5f;
 
-            kris = new Character { name = "guy named Kris ", health = 25f, attackPower = 10f, defensePower = 5f };
+            kris = new Character { name = "guy named Kris", health = 25f, attackPower = 10f, defensePower = 5f };
 
             enemies = new Character[] { slime, zomb, kris };
 
@@ -332,9 +332,9 @@ namespace BattleArena
             }
             else if (input == 2)
             {
+                // Dodged the enemy's attack!
                 Console.WriteLine("You dodged the enemy's attack!");
             }
-
         }
 
         /// <summary>
