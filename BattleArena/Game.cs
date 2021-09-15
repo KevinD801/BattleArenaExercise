@@ -43,8 +43,8 @@ namespace BattleArena
             {
                 Update();
             }
-            End();
 
+            End();
         }
 
         /// <summary>
@@ -59,20 +59,27 @@ namespace BattleArena
             player.defensePower = 0;
             
             // Enemies
-            slime.name = "Slime";
-            slime.health = 10f;
-            slime.attackPower = 1f;
-            slime.defensePower = 0f;
 
-            zomb.name = "Zom-b";
-            zomb.health = 15f;
-            zomb.attackPower = 5f;
-            zomb.defensePower = 2f;
+            // Name = "Slime";
+            // Health = 10f;
+            // AttackPower = 1f;
+            // DefensePower = 0f;
 
-            kris.name = "guy named Kris";
-            kris.health = 25f;
-            kris.attackPower = 10f;
-            kris.defensePower = 5f;
+            slime = new Character { name = "Slime ", health = 10f , attackPower = 1f, defensePower = 0f};
+
+            // Name = "Zom-b";
+            // Health = 15f;
+            // AttackPower = 5f;
+            // DefensePower = 2f;
+
+            zomb = new Character { name = "Zomb-b ", health = 15f, attackPower = 5f, defensePower = 2f };
+
+            // Name = "guy named Kris";
+            // Health = 25f;
+            // AttackPower = 10f;
+            // DefensePower = 5f;
+
+            kris = new Character { name = "guy named Kris ", health = 25f, attackPower = 10f, defensePower = 5f };
 
             enemies = new Character[] { slime, zomb, kris };
 
@@ -179,14 +186,12 @@ namespace BattleArena
             //Display question and store input
             int input = GetInput("Play Again?", "Yes", "No");
 
-
-            //If the player decides to restart...
+            // If the player decides to restart...
             if (input == 1)
             {
                 //...set their current area to be the start and update the player state to be alive
                 ResetCurrentEnemy();
                 currentScene = 0;
-
             }
             //Otherwise if the player wants to quit...
             else if (input == 2)
@@ -211,6 +216,7 @@ namespace BattleArena
             bool userName = false;
             while(!userName)
             {
+                // Intro and get player name
                 Console.WriteLine("Welcome! Please enter your name.");
                 Console.Write("> ");
                 player.name = Console.ReadLine();
@@ -233,18 +239,23 @@ namespace BattleArena
         /// </summary>
         public void CharacterSelection()
         {
-            int input = GetInput("Nice to meet you" + player.name + ". Please select a character." ,
+            int input = GetInput("Nice to meet you " + player.name + ". Please select a character." ,
                 "Knight", "Wizard");
             Console.Write("> ");
 
+            // Wizard
             if (input == 1)
             {
+                // Stats
                 player.health = 50f;
                 player.attackPower = 25f;
                 player.defensePower = 5f;
             }
+
+            // Knight
             else if (input == 2)
             {
+                // Stats
                 player.health = 75f;
                 player.attackPower = 15f;
                 player.defensePower = 10f;
@@ -365,24 +376,6 @@ namespace BattleArena
             currentEnemyIndex = 0;
 
             currentEnemy = enemies[currentEnemyIndex];
-        }
-
-        void Scene()
-        {
-            Console.WriteLine("A Slime stands ");
-            Console.WriteLine("You slayed the Slime");
-        }
-
-        void Scene2()
-        {
-            Console.WriteLine("A Zom-B stands in front of you! What will you do?");
-            Console.WriteLine("You slayed the Zom-B");
-        }
-
-        void Scene3()
-        {
-            Console.WriteLine("A guy named Kris stands in front of you! What will you do?");
-            Console.WriteLine("You slayed the guy named Kris");
         }
     }
 }
