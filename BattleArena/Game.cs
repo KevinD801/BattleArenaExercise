@@ -46,6 +46,9 @@ namespace BattleArena
             InitializeEnemies();
         }
 
+        /// <summary>
+        /// Initialize Enemies from start. 
+        /// </summary>
         public void InitializeEnemies()
         {
             _currentEnemyIndex = 0;
@@ -108,7 +111,8 @@ namespace BattleArena
             int inputReceived = 0;
 
             while (inputReceived != 1 && inputReceived != 2)
-            {//Print options
+            {
+                //Print options
                 Console.WriteLine(description);
                 Console.WriteLine("1. " + option1);
                 Console.WriteLine("2. " + option2);
@@ -208,7 +212,7 @@ namespace BattleArena
             bool userName = false;
             while(!userName)
             {
-                // Intro and get player name
+                // Introduction and get player name
                 Console.WriteLine("Welcome! Please enter your name.");
                 Console.Write("> ");
                 _playerName = Console.ReadLine();
@@ -238,7 +242,7 @@ namespace BattleArena
             // Wizard
             if (input == 1)
             {
-                // Stats
+                // Display for Wizard Stats
 
                 // Player Health = 50f;
                 // Player AttackPower = 25f;
@@ -252,7 +256,7 @@ namespace BattleArena
             // Knight
             else if (input == 2)
             {
-                // Stats
+                // Display for Knight Stats
 
                 // Player Health = 75f;
                 // Player AttackPower = 15f;
@@ -326,7 +330,6 @@ namespace BattleArena
                 Console.ReadKey();
                 Console.Clear();
                 Console.WriteLine("You slayed the " + _currentEnemy.Name);
-
 
                 _currentEnemyIndex++;
 
