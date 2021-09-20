@@ -4,11 +4,18 @@ using System.Text;
 
 namespace BattleArena
 {
+    public enum ItemType
+    {
+        DEFENSE,
+        ATTACK,
+        NONE
+    }
+
     public struct Item
     {
         public string Name;
         public float StatBoost;
-        
+        public ItemType Type;
     }
 
     // Test commit
@@ -61,12 +68,12 @@ namespace BattleArena
         public void InitializeItems()
         {
             // Wizard Items
-            Item bigWand = new Item { Name = "Big Wand", StatBoost = 5 };
-            Item bigShield = new Item { Name = "Big Shield", StatBoost = 15 };
+            Item bigWand = new Item { Name = "Big Wand", StatBoost = 5, Type = 1 };
+            Item bigShield = new Item { Name = "Big Shield", StatBoost = 15, Type = 0 };
 
             // Knight Item
-            Item wand = new Item { Name = "Wand", StatBoost = 1025 };
-            Item shoes = new Item { Name = "Shoes", StatBoost = 900 };
+            Item wand = new Item { Name = "Wand", StatBoost = 1025, Type = 1 };
+            Item shoes = new Item { Name = "Shoes", StatBoost = 900, Type = 0 };
 
             // Initialize Arrays
             _wizardItems = new Item[] { bigWand, bigShield };
@@ -154,8 +161,9 @@ namespace BattleArena
                 // If the player typed an int...
                 if (int.TryParse(input, out inputReceived))
                 {
+                    // ... decre
                     inputReceived--;
-                    if(inputReceived<0 || inputReceived >= options.Length)
+                    if(inputReceived < 0 || inputReceived >= options.Length)
                     {
                         // Set input received to be default value
                         inputReceived = -1;
@@ -165,7 +173,18 @@ namespace BattleArena
                         Console.ReadKey(true);
                     }
                 }
+
+                // If the player didn't type an int
+                else
+                {
+                    // Set input received to be the default value
+                    inputReceived = -1;
+                    Console.WriteLine("Invalid Input");
+                    Console.ReadKey(true);
+                }
+                Console.Clear();
             }
+            return inputReceived;
         }
 
         /// <summary>
@@ -205,14 +224,14 @@ namespace BattleArena
             int input = GetInput("Play Again?", "Yes", "No");
 
             // If the player decides to restart...
-            if (input == 1)
+            if (input == 0)
             {
-                //...set their current area to be the start and update the player state to be alive
+                //...set their current scene to be the start and update the player state to be alive
                 _currentScene = 0;
                 InitializeEnemies();
             }
             //Otherwise if the player wants to quit...
-            else if (input == 2)
+            else if (input == 1)
             {
                 //...set game over to be true
                 _gameOver = true;
@@ -231,23 +250,19 @@ namespace BattleArena
         /// </summary>
         void GetPlayerName()
         {
-            bool userName = false;
-            while(!userName)
+            // Introduction and get player name
+            Console.WriteLine("Welcome! Please enter your name.");
+            Console.Write("> ");
+            _playerName = Console.ReadLine();
+
+            Console.Clear();
+
+            int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
+                "Keep Name", "Rename");
+
+            if (input == 0)
             {
-                // Introduction and get player name
-                Console.WriteLine("Welcome! Please enter your name.");
-                Console.Write("> ");
-                _playerName = Console.ReadLine();
-
-                Console.Clear();
-
-                int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
-                    "Keep Name", "Rename");
-
-                if (input == 1)
-                {
-                    userName = true;
-                }
+                _currentScene++;
             }
         }
 
@@ -262,14 +277,14 @@ namespace BattleArena
             Console.Write("> ");
 
             // Wizard
-            if (input == 1)
+            if (input == 0)
             {
                 // Display for Wizard Stats
 
                 // Player Health = 50f;
                 // Player AttackPower = 25f;
                 // Player DefensePower = 5f;
-                // Items Big Wand Big Shield
+                // Items: Big Wand  and Big Shield
 
                 _player = new Player(_playerName, 50, 25, 5, _wizardItems);
                 _currentScene++;
@@ -277,18 +292,18 @@ namespace BattleArena
             }
 
             // Knight
-            else if (input == 2)
+            else if (input == 1)
             {
                 // Display for Knight Stats
 
                 // Player Health = 75f;
                 // Player AttackPower = 15f;
                 // Player DefensePower = 10f;
+                // Items: Wand and Shoes
 
                 _player = new Player(_playerName, 75, 15, 10, _knightItems);
                 _currentScene++;
             }
-            
         }
 
         /// <summary>
@@ -303,6 +318,21 @@ namespace BattleArena
             Console.WriteLine("Defense Power: " + character.DefensePower + "\n" );
         }
 
+        public void DisplayEquipItemMenu()
+        {
+            // Get item index
+            int choice = GetInput("Select an Item to equip.", _player.GetItemNames());
+
+            // Equip item at given index
+            if (!_player.TryEquipItem(choice))
+            {
+                Console.WriteLine("You couldn't find that item in your bag.");
+            }
+
+            // Print feedback
+            Console.WriteLine("You equipped " + _player.CurrentItem.Name + "!");
+        }
+
         /// <summary>
         /// Simulates one turn in the current monster fight
         /// </summary>
@@ -315,9 +345,9 @@ namespace BattleArena
             DisplayStats(_currentEnemy);
 
             int input = GetInput("A " + _currentEnemy.Name + " stands in front of you! What will you do?", 
-                "Attack", "Equip Item");
+                "Attack", "Equip Item", "Remove Current Item");
 
-            if (input == 1)
+            if (input == 0)
             {
                 // The player attacks the enemy
                 float damageDealt = _player.Attack(_currentEnemy);
@@ -327,10 +357,12 @@ namespace BattleArena
                 damageDealt = _currentEnemy.Attack(_player);
                 Console.WriteLine("The " + _currentEnemy.Name + " dealt " + damageDealt);
             }
-            else if (input == 2)
+            else if (input == 1)
             {
-                // Dodged the enemy's attack!
-                Console.WriteLine("You dodged the enemy's attack!");
+                DisplayEquipItemMenu();
+                Console.ReadKey(true);
+                Console.Clear();
+                return;
             }
         }
 
@@ -343,8 +375,9 @@ namespace BattleArena
             if (_player.Health <= 0)
             {
                 Console.WriteLine("You were slain ");
-                Console.ReadKey();
+                Console.ReadKey(true);
                 Console.Clear();
+                _currentScene = 3;
             }
 
             else if (_currentEnemy.Health <= 0)
@@ -374,13 +407,6 @@ namespace BattleArena
                 _currentScene = 2;
             }
             return stopGame;
-        }
-
-        void ResetCurrentEnemy()
-        {
-            _currentEnemyIndex = 0;
-
-            _currentEnemy = _enemies[_currentEnemyIndex];
         }
     }
 }
