@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace BattleArena
 {
@@ -68,12 +69,12 @@ namespace BattleArena
         public void InitializeItems()
         {
             // Wizard Items
-            Item bigWand = new Item { Name = "Big Wand", StatBoost = 5, Type = 1 };
-            Item bigShield = new Item { Name = "Big Shield", StatBoost = 15, Type = 0 };
+            Item bigWand = new Item { Name = "Big Wand", StatBoost = 5, Type = ItemType.ATTACK };
+            Item bigShield = new Item { Name = "Big Shield", StatBoost = 15, Type = ItemType.DEFENSE};
 
             // Knight Item
-            Item wand = new Item { Name = "Wand", StatBoost = 1025, Type = 1 };
-            Item shoes = new Item { Name = "Shoes", StatBoost = 900, Type = 0 };
+            Item wand = new Item { Name = "Wand", StatBoost = 1025, Type = ItemType.ATTACK };
+            Item shoes = new Item { Name = "Shoes", StatBoost = 900, Type = ItemType.DEFENSE };
 
             // Initialize Arrays
             _wizardItems = new Item[] { bigWand, bigShield };
@@ -130,6 +131,22 @@ namespace BattleArena
         public void End()
         {
             Console.WriteLine("Fairwell Adventurer.");
+        }
+
+        public void Save()
+        {
+            // Create a new stream writer
+            StreamWriter writer = new StreamWriter("SaveData.txt");
+
+            // Save current enemy index
+            writer.WriteLine(_currentEnemyIndex);
+
+            // Save player and enemy stats
+            _player.Save(writer);
+            _currentEnemy.Save(writer);
+
+            // Close writer when done saving
+            writer.Close();
         }
 
         /// <summary>
@@ -250,19 +267,23 @@ namespace BattleArena
         /// </summary>
         void GetPlayerName()
         {
-            // Introduction and get player name
-            Console.WriteLine("Welcome! Please enter your name.");
-            Console.Write("> ");
-            _playerName = Console.ReadLine();
-
-            Console.Clear();
-
-            int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
-                "Keep Name", "Rename");
-
-            if (input == 0)
+            bool userName = false;
+            while (!userName)
             {
-                _currentScene++;
+                // Introduction and get player name
+                Console.WriteLine("Welcome! Please enter your name.");
+                Console.Write("> ");
+                _playerName = Console.ReadLine();
+
+                Console.Clear();
+
+                int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
+                    "Keep Name", "Rename");
+
+                if (input == 0)
+                {
+                    userName = true;
+                }
             }
         }
 
@@ -345,7 +366,7 @@ namespace BattleArena
             DisplayStats(_currentEnemy);
 
             int input = GetInput("A " + _currentEnemy.Name + " stands in front of you! What will you do?", 
-                "Attack", "Equip Item", "Remove Current Item");
+                "Attack", "Equip Item", "Remove Current Item", "Save");
 
             if (input == 0)
             {
@@ -360,6 +381,28 @@ namespace BattleArena
             else if (input == 1)
             {
                 DisplayEquipItemMenu();
+                Console.ReadKey(true);
+                Console.Clear();
+                return;
+            }
+            else if (input == 2)
+            {
+                if (!_player.TryRemoveCurrentItem())
+                {
+                    Console.WriteLine("You're don't have anything equipped.");
+                }
+                else
+                {
+                    Console.WriteLine("You placed the item in your bag.");
+                }
+                Console.ReadKey(true);
+                Console.Clear();
+                return;
+            }
+            else if (input == 3)
+            {
+                Save();
+                Console.WriteLine("Saved Game");
                 Console.ReadKey(true);
                 Console.Clear();
                 return;
