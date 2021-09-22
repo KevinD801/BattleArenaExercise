@@ -28,13 +28,6 @@ namespace BattleArena
         public ItemType Type;
     }
 
-    // Test commit
-
-    /// <summary>
-    /// Represents any entity that exists in game
-    /// </summary>
-
-
     class Game
     {
         private bool _gameOver;
@@ -196,15 +189,13 @@ namespace BattleArena
                 loadSuccessful = false;
             }
 
-            // 
-            _player = new Player();
+            _player.Job = job;
 
             if (!_player.Load(reader))
             {
                 // ... return false
                 loadSuccessful = false;
             }
-
 
             // Create a new instance and try to load the enemy
             _currentEnemy = new Entity();
@@ -284,19 +275,19 @@ namespace BattleArena
         {
             switch (_currentScene)
             {
-                case Scene.STARTMENU:
+                case Scene.:
                     DisplayStartMenu();
                     break;
-
                 case Scene.NAMECREATION:
                     GetPlayerName();
                     break;
-
+                case Scene.CHARACTERSELECTION:
+                    CharacterSelection();
+                    break;
                 case Scene.BATTLE:
                     Battle();
                     CheckBattleResults();
                     break;
-
                 case Scene.RESTARTMENU:
                     DisplayRestartMenu();
                     break;
@@ -347,12 +338,14 @@ namespace BattleArena
 
             else if (input  == 1)
             {
-                Console.WriteLine("Load Successful");
-                Console.ReadKey(true);
-                Console.Clear();
-                _currentEnemy = Scene.BATTLE;
+                if (Load())
+                {
+                    Console.WriteLine("Load Successful");
+                    Console.ReadKey(true);
+                    Console.Clear();
+                    _currentScene = Scene.BATTLE;
+                }
             }
-
             else
             {
                 Console.WriteLine("Load Failed");
@@ -367,23 +360,19 @@ namespace BattleArena
         /// </summary>
         void GetPlayerName()
         {
-            bool userName = false;
-            while (!userName)
+            // Introduction and get player name
+            Console.WriteLine("Welcome! Please enter your name.");
+            Console.Write("> ");
+            _playerName = Console.ReadLine();
+
+            Console.Clear();
+
+            int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
+                "Keep Name", "Rename");
+
+            if (input == 0)
             {
-                // Introduction and get player name
-                Console.WriteLine("Welcome! Please enter your name.");
-                Console.Write("> ");
-                _playerName = Console.ReadLine();
-
-                Console.Clear();
-
-                int input = GetInput("You've entered " + _playerName + " are you sure you want to keep this name?",
-                    "Keep Name", "Rename");
-
-                if (input == 0)
-                {
-                    userName = true;
-                }
+                _currentScene++;
             }
         }
 
@@ -459,6 +448,8 @@ namespace BattleArena
         /// </summary>
         public void Battle()
         {
+            float damageDealt = 0;
+
             // Display stats on Player
             DisplayStats(_player);
 
@@ -471,12 +462,10 @@ namespace BattleArena
             if (input == 0)
             {
                 // The player attacks the enemy
-                float damageDealt = _player.Attack(_currentEnemy);
+                damageDealt = _player.Attack(_currentEnemy);
                 Console.WriteLine("You dealt " + damageDealt + " damage!");
 
-                // The enemy attacks the player
-                damageDealt = _currentEnemy.Attack(_player);
-                Console.WriteLine("The " + _currentEnemy.Name + " dealt " + damageDealt);
+               
             }
             else if (input == 1)
             {
@@ -504,6 +493,12 @@ namespace BattleArena
                 Console.Clear();
                 return;
             }
+            // The enemy attacks the player
+            damageDealt = _currentEnemy.Attack(_player);
+            Console.WriteLine("The " + _currentEnemy.Name + " dealt " + damageDealt);
+
+            Console.ReadKey(true);
+            Console.Clear();
         }
 
         /// <summary>
@@ -517,14 +512,14 @@ namespace BattleArena
                 Console.WriteLine("You were slain ");
                 Console.ReadKey(true);
                 Console.Clear();
-                _currentScene = Scene.RESARTMENU; 
+                _currentScene = Scene.RESTARTMENU; 
             }
 
             else if (_currentEnemy.Health <= 0)
             {
+                Console.WriteLine("You slayed the " + _currentEnemy.Name);
                 Console.ReadKey();
                 Console.Clear();
-                Console.WriteLine("You slayed the " + _currentEnemy.Name);
 
                 _currentEnemyIndex++;
 
@@ -543,7 +538,7 @@ namespace BattleArena
 
             if (stopGame)
             {
-                _currentScene = Scene.RESARTMENU;
+                _currentScene = Scene.RESTARTMENU;
             }
             return stopGame;
         }

@@ -77,6 +77,8 @@ namespace BattleArena
         }
         public virtual bool Load(StreamReader reader)
         {
+            _name = reader.ReadLine();
+
             if (!float.TryParse(reader.ReadLine(), out _health))
             {
                 return false;

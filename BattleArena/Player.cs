@@ -91,9 +91,9 @@ namespace BattleArena
                 return false;
             }
 
+            _currentItemIndex = index;
 
-
-            // Set 
+            // Set the current item to be the array at the given index
             _currentItem = _items[_currentItemIndex];
 
             return true;
@@ -130,6 +130,7 @@ namespace BattleArena
             {
                 itemNames[i] = _items[i].Name;
             }
+
             return itemNames;
         }
 
