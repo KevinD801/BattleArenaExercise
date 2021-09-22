@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -275,7 +275,7 @@ namespace BattleArena
         {
             switch (_currentScene)
             {
-                case Scene.:
+                case Scene.STARTMENU:
                     DisplayStartMenu();
                     break;
                 case Scene.NAMECREATION:
