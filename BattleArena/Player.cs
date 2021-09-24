@@ -85,7 +85,7 @@ namespace BattleArena
         /// <returns>False if the index is outside the bounds of the array</returns>
         public bool TryEquipItem(int index)
         {
-            // 
+            // If the index is out of bounds...
             if (index >= _items.Length || index < 0)
             {
                 return false;
