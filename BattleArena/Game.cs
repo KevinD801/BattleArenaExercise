@@ -394,7 +394,7 @@ namespace BattleArena
                 // Player Health = 50f;
                 // Player AttackPower = 25f;
                 // Player DefensePower = 5f;
-                // Items: Big Wand  and Big Shield
+                // Items: Big Wand and Big Shield
 
                 _player = new Player(_playerName, 50, 25, 5, _wizardItems, "Wizard");
                 _currentScene++;
