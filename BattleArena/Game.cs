@@ -31,7 +31,7 @@ namespace BattleArena
     class Game
     {
         private bool _gameOver;
-        private int _currentScene;
+        private Scene _currentScene;
         private Player _player;
         private Entity[] _enemies;
         private int _currentEnemyIndex;
@@ -234,7 +234,7 @@ namespace BattleArena
                     Console.WriteLine((i + 1) + ". " + options[i]);
                 }
 
-                Console.WriteLine("> ");
+                Console.Write("> ");
 
                 // Get input from player
                 input = Console.ReadLine();
